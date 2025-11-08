@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Test</title>
+    <style>
+        body {
+            margin-top: 250px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-image: url('https://i.ibb.co/smWq6Wq/computer-lab.jpg'); /* 🔹 এখানে তোমার ল্যাব ছবির লিংক বসাও */
+            background-position: center; /* ছবি মাঝখানে থাকবে */
+            background-repeat: no-repeat;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+        }
+
+        #word-container {
+            font-size: 24px;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        #input-box {
+            font-size: 20px;
+            padding: 10px;
+            width: 400px;
+            border-radius: 8px;
+            border: 1px solid #555;
+        }
+
+        #stats {
+            margin-top: 20px;
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            background-color: #075ac7;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #054a9a;
+        }
+
+        h1, h2, h3 {
+            position: absolute;
+            margin: 0;
+        }
+
+        h1 {
+            top: 10px;
+            left: 400px;
+            font-family: "Bauhaus 93", sans-serif;
+            color: #075ac7e6;
+        }
+
+        h2 {
+            top: 50px;
+            left: 20px;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            font-size: 40px;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        h3 {
+            top: 100px;
+            left: 20px;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            font-size: 20px;
+            text-shadow: 2px 2px 5px black;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Digital Computer Training Center</h1>
+    <h2>Rk Ruman Khan</h2>
+    <h3>Computer Trainer</h3>
+
+    <h1 style="margin-top: 100px;">Ruman Typing Test</h1>
+
+    <div id="word-container"></div>
+    <input type="text" id="input-box" placeholder="Start typing..." autofocus>
+    <div id="stats">
+        Time: <span id="time">60</span>s | WPM: <span id="wpm">0</span>
+    </div>
+    <button id="restart">Restart</button>
+
+    <script>
+        const words = [
+            "Digital", "Computer", "Training", "Center", "is", "a", "modern", "institute",
+            "dedicated", "to", "providing", "quality", "computer", "education", "and",
+            "practical", "training.", "The", "center", "offers", "various", "professional",
+            "courses", "such", "as", "Microsoft", "Office,", "Graphics", "Design,", "Typing,",
+            "and", "Data", "Entry.", "It", "focuses", "on", "hands-on", "learning", "to",
+            "help", "students", "develop", "real-world", "computer", "skills.", "Experienced",
+            "instructors", "guide", "students", "step-by-step", "to", "ensure", "they",
+            "understand", "both", "theory", "and", "practice.", "Digital", "Computer",
+            "Training", "Center", "aims", "to", "create", "skilled", "and", "confident",
+            "learners", "who", "are", "ready", "to", "build", "their", "careers", "in", "the",
+            "digital", "world."
+        ];
+
+        const wordContainer = document.getElementById("word-container");
+        const inputBox = document.getElementById("input-box");
+        const timeSpan = document.getElementById("time");
+        const wpmSpan = document.getElementById("wpm");
+        const restartBtn = document.getElementById("restart");
+
+        let time = 60;
+        let timer;
+        let correctWords = 0;
+
+        function startTest() {
+            wordContainer.innerHTML = "";
+            words.forEach(word => {
+                const span = document.createElement("span");
+                span.innerText = word + " ";
+                wordContainer.appendChild(span);
+            });
+
+            inputBox.value = "";
+            inputBox.focus();
+            correctWords = 0;
+            time = 60;
+            timeSpan.innerText = time;
+            wpmSpan.innerText = 0;
+
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => {
+                time--;
+                timeSpan.innerText = time;
+                if (time <= 0) {
+                    clearInterval(timer);
+                    inputBox.disabled = true;
+                    alert("Time's up! Your WPM: " + correctWords);
+                }
+            }, 1000);
+        }
+
+        inputBox.addEventListener("input", () => {
+            const inputWords = inputBox.value.trim().split(" ");
+            const spans = wordContainer.querySelectorAll("span");
+
+            spans.forEach((span, index) => {
+                if (inputWords[index] == null) {
+                    span.className = "";
+                } else if (inputWords[index] === words[index]) {
+                    span.className = "correct";
+                } else {
+                    span.className = "incorrect";
+                }
+            });
+
+            correctWords = inputWords.filter((word, i) => word === words[i]).length;
+            wpmSpan.innerText = correctWords;
+        });
+
+        restartBtn.addEventListener("click", () => {
+            inputBox.disabled = false;
+            startTest();
+        });
+
+        startTest();
+    </script>
+
+</body>
+</html>
